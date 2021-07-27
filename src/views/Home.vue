@@ -6,20 +6,27 @@
       <div class="nav1" @click="addSeance(1)">Seance 1</div>
       <div class="nav2" @click="addSeance(2)">Seance 2</div>
       <div class="nav3" @click="console.log('non')">Seance 3</div>
-      <div class="nav4">Seance 4</div>
+      <div class="nav4">4</div>
     </div>
     <div class="content">
-      <v-card>
-        <v-card-title>
-          {{seance.numeroSeance}}
-        </v-card-title>
-        <v-card-content>
-          <v-img :src="seance.exercices[0].url"></v-img>
-        </v-card-content>
-        <v-card-footer>
-          oui
-        </v-card-footer>
-      </v-card>
+      <div v-if="seance.exercices">{{seance.exercices[indice].nom}}</div>
+      <div v-else>numeros</div>
+      <div class="infos" v-if="seance.exercices">
+        <div class="repetitions">Repetitions : {{seance.exercices[indice].repetitions}}</div>
+        <div class="poids">Poids : {{seance.exercices[indice].poids}}</div>
+        <div class="series">Series : {{seance.exercices[indice].series}}</div>
+      </div>
+      <div class="infos" v-else>
+        test
+      </div>
+      <div class="imageCard" v-if="seance.exercices">
+        <v-img :src="seance.exercices[indice].url"></v-img>
+      </div>
+      <div class="imageCard" v-else></div>
+      <div class="backContent">
+        <v-btn @click="precedent()">Precedent</v-btn>
+        <v-btn @click="suivant()">Suivant</v-btn>
+      </div>
     </div>
   </div>
   
@@ -33,14 +40,20 @@ export default {
   name: 'Home',
   data : () => {
     return {
-      seance: {"a":"a"},
-      seances: [{a: 1}, {a: 2}]
+      seance: {},
+      indice: 0
     }
   },
   methods: {
     addSeance(numeroSeance) {
       this.seance = seances.filter(s => s.numeroSeance === numeroSeance)[0]
-      console.log(this.seance.exercices[0].url)
+      console.log(this.seance)
+    },
+    precedent(){
+      this.indice === 0 ? this.indice : this.indice = this.indice - 1
+    },
+    suivant(){
+      this.indice === this.seance.exercices.length ? this.indice : this.indice = this.indice + 1
     }
   },
   components: {},
@@ -92,6 +105,25 @@ export default {
 .content{
   background-color:yellow;
   flex: 3;
+  display: flex;
+  flex-direction:column;
+}
+.infos{
+  background-color: green;
+  flex: 1;
+  display: flex;
+}
+.infos>*{
+  flex: 1;
+}
+.imageCard{
+  flex: 9
+}
+.backContent{
+  display: flex;
+}
+.backContent>*{
+  flex: 1;
 }
 .footer{
   background-color: purple;
